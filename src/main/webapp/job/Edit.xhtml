@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="JobEditDlg" widgetVar="JobEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJobTitle}">
+            <h:form id="JobEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{jobController.selected != null}">
+                        <p:outputLabel value="ID:" for="id" />
+                        <p:inputText id="id" value="#{jobController.selected.id}" title="#{bundle.EditJobTitle_id}" required="true" requiredMessage="#{bundle.EditJobRequiredMessage_id}"/>
+                        <p:outputLabel for="jobDate" value="Job Date (MM/DD/YYYY): "/>
+                        <h:inputText id="jobDate" value="#{jobController.selected.jobDate}" title="Job Date">
+                            <f:convertDateTime type="localDate" pattern="MM/dd/yyyy"/>
+                        </h:inputText>
+                        <p:outputLabel value="Description" for="description" />
+                        <p:inputTextarea rows="4" cols="30" id="description" value="#{jobController.selected.description}" title="#{bundle.EditJobTitle_description}" />
+                        <p:outputLabel value="Est. Hours" for="estHours" />
+                        <p:inputText id="estHours" value="#{jobController.selected.estHours}" title="#{bundle.EditJobTitle_estHours}" />
+                        <p:outputLabel value="Cost" for="cost" />
+                        <p:inputText id="cost" value="#{jobController.selected.cost}" title="#{bundle.EditJobTitle_cost}" />
+                        <p:outputLabel value="Customer ID" for="customerId" />
+                        <p:selectOneMenu id="customerId" value="#{jobController.selected.customerId}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{poolCustomerController.itemsAvailableSelectOne}"
+                                           var="customerIdItem"
+                                           itemLabel="#{customerIdItem.customerId.name}"
+                                           itemValue="#{customerIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{jobController.update}" value="#{bundle.Save}" update="display,:JobListForm:datalist,:growl" oncomplete="handleSubmit(args, 'JobEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="JobEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
